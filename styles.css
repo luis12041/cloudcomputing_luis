@@ -78,3 +78,139 @@ a {
 a:hover {
   text-decoration: underline;
 }
+/* Fondo general */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to right, #2193b0, #6dd5ed);
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+/* Contenedor principal */
+.container {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 20px;
+  margin: 50px 0;
+  max-width: 900px;
+  width: 95%;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* Título principal */
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #1a1a1a;
+}
+
+/* Botón de cerrar sesión */
+.cerrar-btn {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.cerrar-btn:hover {
+  background-color: #cc0000;
+}
+
+/* Secciones estilo tarjeta */
+.card {
+  background-color: #f9f9f9;
+  padding: 25px;
+  margin-bottom: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Título de sección */
+.card h2 {
+  margin-top: 0;
+  color: #1e3c72;
+}
+
+/* Entradas de texto */
+input[type="text"],
+input[type="email"],
+input[type="file"],
+select {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* Botones */
+button {
+  background-color: #1e88e5;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #1565c0;
+}
+
+/* Lista de estudiantes y archivos */
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul li {
+  background-color: #e3f2fd;
+  margin-bottom: 8px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Etiquetas */
+label {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+
+  .cerrar-btn {
+    top: 15px;
+    right: 20px;
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+}
