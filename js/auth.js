@@ -1,9 +1,6 @@
 const SUPABASE_URL = "https://aplyqmgoinnerwbtyzmc.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwbHlxbWdvaW5uZXJ3YnR5em1jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1MDUxMzgsImV4cCI6MjA3MDA4MTEzOH0._dPyvyWE2cGXCmg228CG5gjBP-kw17RqNgjJoPK-qp8"
-
-const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// resto igual
+const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 function toggleForms() {
   const loginForm = document.getElementById("login-form");

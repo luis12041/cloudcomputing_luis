@@ -1,6 +1,6 @@
 const SUPABASE_URL = "https://aplyqmgoinnerwbtyzmc.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwbHlxbWdvaW5uZXJ3YnR5em1jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1MDUxMzgsImV4cCI6MjA3MDA4MTEzOH0._dPyvyWE2cGXCmg228CG5gjBP-kw17RqNgjJoPK-qp8";
-const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwbHlxbWdvaW5uZXJ3YnR5em1jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1MDUxMzgsImV4cCI6MjA3MDA4MTEzOH0._dPyvyWE2cGXCmg228CG5gjBP-kw17RqNgjJoPK-qp8"
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function agregarEstudiante() {
   const nombre = document.getElementById("nombre").value;
@@ -46,90 +46,20 @@ async function cargarEstudiantes() {
   const lista = document.getElementById("lista-estudiantes");
   lista.innerHTML = "";
   data.forEach((est) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${est.nombre}</td>
-      <td>${est.correo}</td>
-      <td>${est.clase}</td>
-      <td>
-        <button onclick="editarEstudiante('${est.id}')">✏ Editar</button>
-        <button onclick="eliminarEstudiante('${est.id}')">🗑 Eliminar</button>
-      </td>
-    `;
-    lista.appendChild(row);
+    const item = document.createElement("li");
+    item.textContent = `${est.nombre} (${est.clase})`; // 🔧 CORREGIDO
+    lista.appendChild(item);
   });
 }
 
-// 📝 Editar estudiante
-async function editarEstudiante(id) {
-  const { data: estudiante, error } = await client
-    .from("estudiantes")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error) {
-    alert("Error al obtener datos: " + error.message);
-    return;
-  }
-
-  const nuevoNombre = prompt("Nuevo nombre:", estudiante.nombre);
-  const nuevoCorreo = prompt("Nuevo correo:", estudiante.correo);
-  const nuevaClase = prompt("Nueva clase:", estudiante.clase);
-
-  if (!nuevoNombre || !nuevoCorreo || !nuevaClase) {
-    alert("Todos los campos son obligatorios.");
-    return;
-  }
-
-  const { error: updateError } = await client
-    .from("estudiantes")
-    .update({
-      nombre: nuevoNombre,
-      correo: nuevoCorreo,
-      clase: nuevaClase,
-    })
-    .eq("id", id);
-
-  if (updateError) {
-    alert("Error al actualizar: " + updateError.message);
-  } else {
-    alert("Estudiante actualizado ✅");
-    cargarEstudiantes();
-  }
-}
-
-// 🗑 Eliminar estudiante
-async function eliminarEstudiante(id) {
-  if (!confirm("¿Seguro que quieres eliminar este estudiante?")) return;
-
-  const { error } = await client
-    .from("estudiantes")
-    .delete()
-    .eq("id", id);
-
-  if (error) {
-    alert("Error al eliminar: " + error.message);
-  } else {
-    alert("Estudiante eliminado ✅");
-    cargarEstudiantes();
-  }
-}
-
-
 cargarEstudiantes();
-// ✅ Subir archivo
+
 async function subirArchivo() {
   const archivoInput = document.getElementById("archivo");
   const archivo = archivoInput.files[0];
 
   if (!archivo) {
-    showToast("Selecciona un archivo primero.", "error");
-    return;
-  }
-
-  if (archivo.size > 5 * 1024 * 1024) {
-    showToast("El archivo no debe superar los 5 MB.", "error");
+    alert("Selecciona un archivo primero.");
     return;
   }
 
@@ -139,37 +69,25 @@ async function subirArchivo() {
   } = await client.auth.getUser();
 
   if (userError || !user) {
-    showToast("Sesión no válida.", "error");
+    alert("Sesión no válida.");
     return;
   }
 
-  const nombreRuta = '${user.id}/${archivo.name}';
-
-  const { data: existentes } = await client.storage
-    .from("tareas")
-    .list(user.id);
-
-  if (existentes?.some((f) => f.name === archivo.name)) {
-    const reemplazar = confirm("Ya existe un archivo con ese nombre. ¿Deseas reemplazarlo?");
-    if (!reemplazar) return;
-  }
-
-  const { error } = await client.storage
+  const nombreRuta = `${user.id}/${archivo.name}`; // 🔧 CORREGIDO
+  const { data, error } = await client.storage
     .from("tareas")
     .upload(nombreRuta, archivo, {
       cacheControl: "3600",
-      upsert: true,
+      upsert: false,
     });
 
   if (error) {
-    showToast("Error al subir: " + error.message, "error");
+    alert("Error al subir: " + error.message);
   } else {
-    showToast("Archivo subido correctamente ✅", "success");
-    document.getElementById("archivo").value = ""; // 🧹 Limpiar input
+    alert("Archivo subido correctamente.");
     listarArchivos();
   }
 }
-
 
 async function listarArchivos() {
   const {
@@ -184,7 +102,7 @@ async function listarArchivos() {
 
   const { data, error } = await client.storage
     .from("tareas")
-    .list('${user.id}', { limit: 20 });
+    .list(`${user.id}`, { limit: 20 }); // 🔧 CORREGIDO
 
   const lista = document.getElementById("lista-archivos");
   lista.innerHTML = "";
@@ -197,7 +115,7 @@ async function listarArchivos() {
   data.forEach(async (archivo) => {
     const { data: signedUrlData, error: signedUrlError } = await client.storage
       .from("tareas")
-      .createSignedUrl('${user.id}/${archivo.name}', 60);
+      .createSignedUrl(`${user.id}/${archivo.name}`, 60); // 🔧 CORREGIDO
 
     if (signedUrlError) {
       console.error("Error al generar URL firmada:", signedUrlError.message);
@@ -223,7 +141,7 @@ async function listarArchivos() {
         <a href="${publicUrl}" target="_blank">Ver PDF</a>
       `;
     } else {
-      item.innerHTML = <a href="${publicUrl}" target="_blank">${archivo.name}</a>;
+      item.innerHTML = `<a href="${publicUrl}" target="_blank">${archivo.name}</a>`; // 🔧 CORREGIDO
     }
 
     lista.appendChild(item);
